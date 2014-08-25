@@ -84,6 +84,7 @@ Matrix.prototype.make3x3 = function()
     null;
 };
 
+// return the vector in array form
 Vector.prototype.flatten = function ()
 {
   return this.elements;
