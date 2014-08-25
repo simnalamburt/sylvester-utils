@@ -1,5 +1,3 @@
-// augment Sylvester some
-
 // Make translation transform matrix
 Matrix.Translation = function(v)
 {
