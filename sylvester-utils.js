@@ -20,7 +20,7 @@ Matrix.Translation = function(v)
   throw new Error('Invalid length for Translation', 'sylvester-utils.js', 18);
 }
 
-// Column-major matrix flattening
+// return column-major flattened matrix in array form
 Matrix.prototype.flatten = function()
 {
   var result = [];
