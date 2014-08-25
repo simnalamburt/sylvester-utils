@@ -38,34 +38,36 @@ Matrix.prototype.flatten = function()
   return result;
 }
 
+// if Matrix is smaller or equal to 4x4: make it 4x4
+// else: do nothing and return null
 Matrix.prototype.ensure4x4 = function()
 {
-  if (this.elements.length == 4 &&
-      this.elements[0].length == 4)
-    return this;
+  var dim = this.elements;
+  var rows = dim.length;
+  var cols = dim[0].length;
 
-  if (this.elements.length > 4 ||
-      this.elements[0].length > 4)
-    return null;
+  if (rows === 4 && cols === 4) return this;
+  if (rows > 4 || cols > 4) return null;
 
-  for (var i = 0; i < this.elements.length; i++) {
-    for (var j = this.elements[i].length; j < 4; j++) {
-      if (i == j)
-        this.elements[i].push(1);
-      else
-        this.elements[i].push(0);
+  var i, j;
+  // Extending each rows
+  for (i = 0; i < rows; ++i) {
+    var row = dim[i];
+    for (j = row.length; j < 4; ++j) {
+      row.push( i === j ? 1 : 0 );
     }
   }
 
-  for (var i = this.elements.length; i < 4; i++) {
-    if (i == 0)
-      this.elements.push([1, 0, 0, 0]);
-    else if (i == 1)
-      this.elements.push([0, 1, 0, 0]);
-    else if (i == 2)
-      this.elements.push([0, 0, 1, 0]);
-    else if (i == 3)
-      this.elements.push([0, 0, 0, 1]);
+  // Making new rows
+  switch(rows) {
+  case 0:
+    dim.push([1, 0, 0, 0]);
+  case 1:
+    dim.push([0, 1, 0, 0]);
+  case 2:
+    dim.push([0, 0, 1, 0]);
+  case 3:
+    dim.push([0, 0, 0, 1]);
   }
 
   return this;
