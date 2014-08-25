@@ -1,14 +1,14 @@
 // Make translation transform matrix
-Matrix.Translation = function(v)
-{
+Matrix.Translation = function(v) {
+  var r;
   switch(v.elements.length) {
   case 2:
-    var r = Matrix.I(3);
+    r = Matrix.I(3);
     r.elements[2][0] = v.elements[0];
     r.elements[2][1] = v.elements[1];
     return r;
   case 3:
-    var r = Matrix.I(4);
+    r = Matrix.I(4);
     r.elements[0][3] = v.elements[0];
     r.elements[1][3] = v.elements[1];
     r.elements[2][3] = v.elements[2];
@@ -16,11 +16,10 @@ Matrix.Translation = function(v)
   }
 
   throw new Error('Invalid length for Translation', 'sylvester-utils.js', 18);
-}
+};
 
 // return column-major flattened matrix in array form
-Matrix.prototype.flatten = function()
-{
+Matrix.prototype.flatten = function() {
   var result = [];
 
   if (this.elements.length !== 0) {
@@ -34,12 +33,11 @@ Matrix.prototype.flatten = function()
   }
 
   return result;
-}
+};
 
 // if Matrix is smaller or equal to 4x4: make it 4x4
 // else: do nothing and return null
-Matrix.prototype.ensure4x4 = function()
-{
+Matrix.prototype.ensure4x4 = function() {
   var dim = this.elements;
   var rows = dim.length;
   var cols = dim[0].length;
@@ -60,10 +58,13 @@ Matrix.prototype.ensure4x4 = function()
   switch(rows) {
   case 0:
     dim.push([1, 0, 0, 0]);
+    /* falls through */
   case 1:
     dim.push([0, 1, 0, 0]);
+    /* falls through */
   case 2:
     dim.push([0, 0, 1, 0]);
+    /* falls through */
   case 3:
     dim.push([0, 0, 0, 1]);
   }
@@ -73,8 +74,7 @@ Matrix.prototype.ensure4x4 = function()
 
 // if matrix is 4x4: return 3x3 subset of it
 // else: do nothing and return null
-Matrix.prototype.make3x3 = function()
-{
+Matrix.prototype.make3x3 = function() {
   return this.elements.length === 4 && this.elements[0].length === 4 ?
     Matrix.create([[this.elements[0][0], this.elements[0][1], this.elements[0][2]],
       [this.elements[1][0], this.elements[1][1], this.elements[1][2]],
@@ -83,23 +83,13 @@ Matrix.prototype.make3x3 = function()
 };
 
 // return the vector in array form
-Vector.prototype.flatten = function ()
-{
-  return this.elements;
-};
+Vector.prototype.flatten = function () { return this.elements; };
 
-//
-// gluLookAt
-//
-function makeLookAt(ex, ey, ez,
-    cx, cy, cz,
-    ux, uy, uz)
-{
+// make a viewing transformation (gluLookAt)
+function makeLookAt(ex, ey, ez, cx, cy, cz, ux, uy, uz) {
   var eye = $V([ex, ey, ez]);
   var center = $V([cx, cy, cz]);
   var up = $V([ux, uy, uz]);
-
-  var mag;
 
   var z = eye.subtract(center).toUnitVector();
   var x = up.cross(z).toUnitVector();
@@ -117,11 +107,8 @@ function makeLookAt(ex, ey, ez,
   return m.x(t);
 }
 
-//
-// gluPerspective
-//
-function makePerspective(fovy, aspect, znear, zfar)
-{
+// make a perspective projection matrix (gluPerspective)
+function makePerspective(fovy, aspect, znear, zfar) {
   var ymax = znear * Math.tan(fovy * Math.PI / 360.0);
   var ymin = -ymax;
   var xmin = ymin * aspect;
@@ -130,13 +117,8 @@ function makePerspective(fovy, aspect, znear, zfar)
   return makeFrustum(xmin, xmax, ymin, ymax, znear, zfar);
 }
 
-//
-// glFrustum
-//
-function makeFrustum(left, right,
-    bottom, top,
-    znear, zfar)
-{
+// make a perspective matrix (glFrustum)
+function makeFrustum(left, right, bottom, top, znear, zfar) {
   var X = 2*znear/(right-left);
   var Y = 2*znear/(top-bottom);
   var A = (right+left)/(right-left);
@@ -150,11 +132,8 @@ function makeFrustum(left, right,
       [0, 0, -1, 0]]);
 }
 
-//
-// glOrtho
-//
-function makeOrtho(left, right, bottom, top, znear, zfar)
-{
+// make an orthographic matrix (glOrtho)
+function makeOrtho(left, right, bottom, top, znear, zfar) {
   var tx = - (right + left) / (right - left);
   var ty = - (top + bottom) / (top - bottom);
   var tz = - (zfar + znear) / (zfar - znear);
