@@ -1,14 +1,15 @@
 // augment Sylvester some
-Matrix.Translation = function (v)
+
+// Make translation transform matrix
+Matrix.Translation = function(v)
 {
-  if (v.elements.length == 2) {
+  switch(v.elements.length) {
+  case 2:
     var r = Matrix.I(3);
     r.elements[2][0] = v.elements[0];
     r.elements[2][1] = v.elements[1];
     return r;
-  }
-
-  if (v.elements.length == 3) {
+  case 3:
     var r = Matrix.I(4);
     r.elements[0][3] = v.elements[0];
     r.elements[1][3] = v.elements[1];
@@ -16,7 +17,7 @@ Matrix.Translation = function (v)
     return r;
   }
 
-  throw "Invalid length for Translation";
+  throw new Error('Invalid length for Translation', 'sylvester-utils.js', 18);
 }
 
 Matrix.prototype.flatten = function ()
