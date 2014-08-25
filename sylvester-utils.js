@@ -20,16 +20,21 @@ Matrix.Translation = function(v)
   throw new Error('Invalid length for Translation', 'sylvester-utils.js', 18);
 }
 
-Matrix.prototype.flatten = function ()
+// Column-major matrix flattening
+Matrix.prototype.flatten = function()
 {
   var result = [];
-  if (this.elements.length == 0)
-    return [];
 
+  if (this.elements.length !== 0) {
+    var cols = this.elements[0].length;
+    for (var j = 0; j < cols; j++) {
+      var rows = this.elements.length;
+      for (var i = 0; i < rows; i++) {
+        result.push(this.elements[i][j]);
+      }
+    }
+  }
 
-  for (var j = 0; j < this.elements[0].length; j++)
-    for (var i = 0; i < this.elements.length; i++)
-      result.push(this.elements[i][j]);
   return result;
 }
 
