@@ -73,15 +73,15 @@ Matrix.prototype.ensure4x4 = function()
   return this;
 };
 
+// if matrix is 4x4: return 3x3 subset of it
+// else: do nothing and return null
 Matrix.prototype.make3x3 = function()
 {
-  if (this.elements.length != 4 ||
-      this.elements[0].length != 4)
-    return null;
-
-  return Matrix.create([[this.elements[0][0], this.elements[0][1], this.elements[0][2]],
+  return this.elements.length === 4 && this.elements[0].length === 4 ?
+    Matrix.create([[this.elements[0][0], this.elements[0][1], this.elements[0][2]],
       [this.elements[1][0], this.elements[1][1], this.elements[1][2]],
-      [this.elements[2][0], this.elements[2][1], this.elements[2][2]]]);
+      [this.elements[2][0], this.elements[2][1], this.elements[2][2]]]) :
+    null;
 };
 
 Vector.prototype.flatten = function ()
