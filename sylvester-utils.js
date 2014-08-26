@@ -1,3 +1,18 @@
+// CommonJS style module & browserify support
+if (typeof require === 'function' && typeof exports === 'object') {
+  var Sylvester = require('sylvester');
+
+  var Vector = Sylvester.Vector;
+  var Matrix = Sylvester.Matrix;
+  var $V = Sylvester.Vector.create;
+  var $M = Sylvester.Matrix.create;
+
+  Sylvester.makeLookAt      = makeLookAt
+  Sylvester.makePerspective = makePerspective
+  Sylvester.makeFrustum     = makeFrustum
+  Sylvester.makeOrtho       = makeOrtho
+}
+
 // Make translation transform matrix
 Matrix.Translation = function(v) {
   var r;
